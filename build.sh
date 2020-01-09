@@ -10,9 +10,12 @@ if [ ! -d "build" ]; then
   mkdir build
 fi
 
-cd bin
-rm -rf *
+if [ -d "bin" ]; then
+  cd bin
+  rm -rf *
+  cd ..
+fi
 
-cd ../build
+cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j4

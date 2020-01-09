@@ -10,7 +10,7 @@
 #include <vector>
 #include <map>
 
-// double matricies
+/// double matricies
 typedef Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> MatXX;
 typedef Eigen::Matrix<double, 10, 10> Mat1010;
 typedef Eigen::Matrix<double, 13, 13> Mat1313;
@@ -42,7 +42,7 @@ typedef Eigen::Matrix<double, 4, 4> Mat44;
 typedef Eigen::Matrix<double, 14, 14> Mat1414;
 typedef Eigen::Matrix<double, 15, 15> Mat1515;
 
-// float matricies
+/// float matricies
 typedef Eigen::Matrix<float, 3, 3> Mat33f;
 typedef Eigen::Matrix<float, 10, 3> Mat103f;
 typedef Eigen::Matrix<float, 2, 2> Mat22f;
@@ -65,7 +65,7 @@ typedef Eigen::Matrix<float, 1, 2> Mat12f;
 typedef Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic> MatXXf;
 typedef Eigen::Matrix<float, 14, 14> Mat1414f;
 
-// double vectors
+/// double vectors
 typedef Eigen::Matrix<double, 15, 1> Vec15;
 typedef Eigen::Matrix<double, 14, 1> Vec14;
 typedef Eigen::Matrix<double, 13, 1> Vec13;
@@ -81,7 +81,7 @@ typedef Eigen::Matrix<double, 2, 1> Vec2;
 typedef Eigen::Matrix<double, 1, 1> Vec1;
 typedef Eigen::Matrix<double, Eigen::Dynamic, 1> VecX;
 
-// float vectors
+/// float vectors
 typedef Eigen::Matrix<float, 12, 1> Vec12f;
 typedef Eigen::Matrix<float, 8, 1> Vec8f;
 typedef Eigen::Matrix<float, 10, 1> Vec10f;
@@ -92,19 +92,16 @@ typedef Eigen::Matrix<float, 9, 1> Vec9f;
 typedef Eigen::Matrix<float, Eigen::Dynamic, 1> VecXf;
 typedef Eigen::Matrix<float, 14, 1> Vec14f;
 
-// Quaternions
+/// Quaternions
 typedef Eigen::Quaterniond Qd;
 typedef Eigen::Quaternionf Qf;
 
-// Vector of Eigen vectors
+/// Vector of Eigen vectors
 typedef std::vector<Vec2, Eigen::aligned_allocator<Vec2>> VecVec2;
 typedef std::vector<Vec3, Eigen::aligned_allocator<Vec3>> VecVec3;
 typedef std::vector<Vec2f, Eigen::aligned_allocator<Vec2f>> VecVec2f;
 typedef std::vector<Vec3f, Eigen::aligned_allocator<Vec3f>> VecVec3f;
 
-// Map of Eigen matrix
+/// Map of Eigen matrix
 typedef std::map<unsigned long, MatXX, std::less<unsigned long>, Eigen::aligned_allocator<MatXX>> MapMatXX;
-
-
-
 #endif

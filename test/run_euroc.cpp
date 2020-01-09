@@ -23,7 +23,7 @@ std::string sConfig_path;
 std::shared_ptr<System> pSystem;
 
 void PubImuData() {
-	string sImu_data_file = sConfig_path + "MH_05_imu0.txt";
+	string sImu_data_file = sData_path + "imu0/data.csv";
 	cout << "1 PubImuData start sImu_data_filea: " << sImu_data_file << endl;
 	ifstream fsImu;
 	fsImu.open(sImu_data_file.c_str());
@@ -36,10 +36,17 @@ void PubImuData() {
 	double dStampNSec = 0.0;
 	Vector3d vAcc;
 	Vector3d vGyr;
+  char tmp;
+  bool skip_first_line = true;
   /// read imu data
 	while (std::getline(fsImu, sImu_line) && !sImu_line.empty()) {
+    if (skip_first_line) {
+      skip_first_line = false;
+      continue;
+    }
 		std::istringstream ssImuData(sImu_line);
-		ssImuData >> dStampNSec >> vGyr.x() >> vGyr.y() >> vGyr.z() >> vAcc.x() >> vAcc.y() >> vAcc.z();
+		ssImuData >> dStampNSec >> tmp >> vGyr.x() >> tmp >> vGyr.y() >> tmp >> vGyr.z() >> tmp 
+              >> vAcc.x() >> tmp >> vAcc.y() >> tmp >> vAcc.z();
 		// cout << "Imu t: " << fixed << dStampNSec << " gyr: " << vGyr.transpose() << " acc: " << vAcc.transpose() << endl;
 		pSystem->PubImuData(dStampNSec/1e9, vGyr, vAcc);
 		usleep(5000*nDelayTimes);
@@ -48,7 +55,7 @@ void PubImuData() {
 }
 
 void PubImageData() {
-	string sImage_file = sConfig_path + "MH_05_cam0.txt";
+	string sImage_file = sData_path + "cam0/data.csv";
 	cout << "1 PubImageData start sImage_file: " << sImage_file << endl;
 	ifstream fsImage;
 	fsImage.open(sImage_file.c_str());
@@ -60,10 +67,16 @@ void PubImageData() {
 	std::string sImage_line;
 	double dStampNSec;
 	string sImgFileName;
+  char tmp;
+  bool skip_first_line = true;
 	// cv::namedWindow("SOURCE IMAGE", CV_WINDOW_AUTOSIZE);
 	while (std::getline(fsImage, sImage_line) && !sImage_line.empty()) {
+    if (skip_first_line) {
+      skip_first_line = false;
+      continue;
+    }
 		std::istringstream ssImuData(sImage_line);
-		ssImuData >> dStampNSec >> sImgFileName;
+		ssImuData >> dStampNSec >> tmp >> sImgFileName;
 		// cout << "Image t : " << fixed << dStampNSec << " Name: " << sImgFileName << endl;
 		string imagePath = sData_path + "cam0/data/" + sImgFileName;
 		Mat img = imread(imagePath.c_str(), 0);
@@ -82,11 +95,11 @@ void PubImageData() {
 int main(int argc, char **argv) {
 	if (argc != 3) {
 	  cerr << "cmd: ./run_euroc PATH_TO_FOLDER/MH-05/mav0 PATH_TO_CONFIG/config\n"
-		  	 << "For example: ./run_euroc ../EurocData/mav0/ ../config/" << endl;
+		  	 << "For example: ./run_euroc ../euroc_data/mav0/ ../config/" << endl;
 		return -1;
 	}
 
-	sData_path = argv[1];    // "../EurocData/mav0/"
+	sData_path = argv[1];    // "../euroc_data/mav0/"
 	sConfig_path = argv[2];  // "../config/"
 
 	pSystem.reset(new System(sConfig_path));
@@ -99,7 +112,7 @@ int main(int argc, char **argv) {
 
 	thd_PubImuData.join();
 	thd_PubImageData.join();
-	// thd_BackEnd.join();
+	thd_BackEnd.join();
 	thd_Draw.join();
 	cout << "main end... see you ..." << endl;
 

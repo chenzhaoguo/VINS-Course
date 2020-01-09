@@ -248,19 +248,16 @@ void Problem::SetOrdering() {
   /// Note:: verticies_ 是 map 类型的, 顺序是按照 id 号排序的
   for (auto vertex: verticies_) {
     ordering_generic_ += vertex.second->LocalDimension();  // 所有的优化变量总维数
-
     if (problemType_ == ProblemType::SLAM_PROBLEM) {   // 如果是 slam 问题，还要分别统计 pose 和 landmark 的维数，后面会对他们进行排序
       AddOrderingSLAM(vertex.second);
     }
-
-    }
-
+  }
   /// 这里要把 landmark 的 ordering 加上 pose 的数量，就保持了 landmark 在后,而 pose 在前
   if (problemType_ == ProblemType::SLAM_PROBLEM) {
     ulong all_pose_dimension = ordering_poses_;
     for (auto landmarkVertex : idx_landmark_vertices_) {
       landmarkVertex.second->SetOrderingId(landmarkVertex.second->OrderingId() + all_pose_dimension);
-      std::cout << "landmark vertex Id: " << landmarkVertex.second->Id() << " after order: " << landmarkVertex.second->OrderingId() << std::endl;
+      // std::cout << "landmark vertex Id: " << landmarkVertex.second->Id() << " after order: " << landmarkVertex.second->OrderingId() << std::endl;
     }
   }
   /// CHECK_EQ(CheckOrdering(), true);

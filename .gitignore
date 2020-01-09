@@ -13,4 +13,5 @@
 .vscode/
 build/
 bin/
-EurocData/
+euroc_data/
+python_tool/

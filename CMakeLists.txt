@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(vins_estimator)
+project(vins_simulation)
 
 set(CMAKE_BUILD_TYPE "Release")
 set(CMAKE_CXX_FLAGS "-std=c++11")
@@ -72,8 +72,8 @@ target_link_libraries(MyVio
   camera_model
 )
 
-add_executable(run_euroc test/run_euroc.cpp)
-target_link_libraries(run_euroc MyVio -lpthread) 
+add_executable(run_simulation test/run_simulation_data.cpp)
+target_link_libraries(run_simulation MyVio -lpthread)
 
 add_executable(testCurveFitting test/CurveFitting.cpp)
 target_link_libraries(testCurveFitting MyVio)

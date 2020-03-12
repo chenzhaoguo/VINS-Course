@@ -7,7 +7,7 @@ using namespace cv;
 using namespace pangolin;
 
 System::System(string sConfig_file_) : bStart_backend(true) {
-  string sConfig_file = sConfig_file_ + "euroc_config.yaml";
+  string sConfig_file = sConfig_file_ + "simulation_config.yaml";
   cout << "1 System() sConfig_file: " << sConfig_file << endl;
   readParameters(sConfig_file);
 
@@ -15,7 +15,7 @@ System::System(string sConfig_file_) : bStart_backend(true) {
 
   estimator.setParameter();
   ofs_pose.open("./pose_output.txt",fstream::out);
-  if(!ofs_pose.is_open()) {
+  if (!ofs_pose.is_open()) {
     cerr << "ofs_pose is not open" << endl;
   }
   // thread thd_RunBackend(&System::process,this);
@@ -44,7 +44,7 @@ System::~System() {
   ofs_pose.close();
 }
 
-void System::PubImageData(double dStampSec, Mat &img) {
+void System::PubImageData(double dStampSec, std::vector<Eigen::Vector2d> &feature_point) {
   if (!init_feature) {
     cout << "1 PubImageData skip the first detected feature, which doesn't contain optical flow speed" << endl;
     init_feature = 1;
@@ -80,39 +80,20 @@ void System::PubImageData(double dStampSec, Mat &img) {
     PUB_THIS_FRAME = false;
   }
 
-  TicToc t_r;
-  // cout << "3 PubImageData t : " << dStampSec << endl;
-  trackerData[0].readImage(img, dStampSec);
-
-  for (unsigned int i = 0; ; i++) {
-    bool completed = false;
-    completed |= trackerData[0].updateID(i);
-    if (!completed) break;
-  }
   if (PUB_THIS_FRAME) {
     pub_count++;
     shared_ptr<IMG_MSG> feature_points(new IMG_MSG());
     feature_points->header = dStampSec;
     vector<set<int> > hash_ids(NUM_OF_CAM);
-    for (int i = 0; i < NUM_OF_CAM; i++) {
-      auto &un_pts = trackerData[i].cur_un_pts;
-      auto &cur_pts = trackerData[i].cur_pts;
-      auto &ids = trackerData[i].ids;
-      auto &pts_velocity = trackerData[i].pts_velocity;
-      for (unsigned int j = 0; j < ids.size(); j++) {
-        if (trackerData[i].track_cnt[j] > 1) {
-          int p_id = ids[j];
-          hash_ids[i].insert(p_id);
-          double x = un_pts[j].x;
-          double y = un_pts[j].y;
-          double z = 1;
-          feature_points->points.push_back(Vector3d(x, y, z));
-          feature_points->id_of_point.push_back(p_id * NUM_OF_CAM + i);
-          feature_points->u_of_point.push_back(cur_pts[j].x);
-          feature_points->v_of_point.push_back(cur_pts[j].y);
-          feature_points->velocity_x_of_point.push_back(pts_velocity[j].x);
-          feature_points->velocity_y_of_point.push_back(pts_velocity[j].y);
-        }
+    for (int i = 0; i < NUM_OF_CAM; ++i) {
+      for (unsigned int j = 0; j < feature_point.size(); ++j) {
+        Eigen::Vector2d &feapt = feature_point[j];
+        feature_points->points.push_back(Vector3d(feapt.x(), feapt.y(), 1));
+        feature_points->id_of_point.push_back(j);
+        feature_points->u_of_point.push_back(feapt.x());
+        feature_points->v_of_point.push_back(feapt.y());
+        feature_points->velocity_x_of_point.push_back(feapt.x());
+        feature_points->velocity_y_of_point.push_back(feapt.y());
       }
       /// skip the first image; since no optical speed on frist image
       if (!init_pub) {
@@ -127,18 +108,6 @@ void System::PubImageData(double dStampSec, Mat &img) {
         con.notify_one();
       }
     }
-  }
-
-  cv::Mat show_img;
-  cv::cvtColor(img, show_img, CV_GRAY2RGB);
-  if (SHOW_TRACK) {
-    for (unsigned int j = 0; j < trackerData[0].cur_pts.size(); j++) {
-      double len = min(1.0, 1.0 * trackerData[0].track_cnt[j] / WINDOW_SIZE);
-      cv::circle(show_img, trackerData[0].cur_pts[j], 2, cv::Scalar(255 * (1 - len), 0, 255 * len), 2);
-    }
-    cv::namedWindow("IMAGE", CV_WINDOW_AUTOSIZE);
-    cv::imshow("IMAGE", show_img);
-    cv::waitKey(1);
   }
   // cout << "5 PubImage" << endl;
 }

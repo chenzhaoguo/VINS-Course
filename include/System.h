@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <queue>
 #include <map>
+#include <vector>
 #include <thread>
 #include <mutex>
 #include <fstream>
@@ -41,9 +42,8 @@ class System {
   System(std::string sConfig_files);
 
   ~System();
-
-  void PubImageData(double dStampSec, cv::Mat &img);
-
+  
+  void PubImageData(double dStampSec, std::vector<Eigen::Vector2d> &feature_point);
   void PubImuData(double dStampSec, const Eigen::Vector3d &vGyr, const Eigen::Vector3d &vAcc);
 
   // thread: visual-inertial odometry

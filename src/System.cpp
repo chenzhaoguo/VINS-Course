@@ -14,7 +14,7 @@ System::System(string sConfig_file_) : bStart_backend(true) {
   trackerData[0].readIntrinsicParameter(sConfig_file);
 
   estimator.setParameter();
-  ofs_pose.open("./pose_output.txt",fstream::out);
+  ofs_pose.open("./estimate_result.txt",fstream::out);
   if (!ofs_pose.is_open()) {
     cerr << "ofs_pose is not open" << endl;
   }
@@ -270,7 +270,7 @@ void System::ProcessBackEnd() {
         cout << "1 BackEnd processImage dt: " << fixed << t_processImage.toc() 
              << " stamp: " <<  dStamp << " p_wi: " << p_wi.transpose() << endl;
         ofs_pose << fixed << dStamp << " " << p_wi(0) << " " << p_wi(1) << " " << p_wi(2) << " " 
-                 << q_wi.w() << " " << q_wi.x() << " " << q_wi.y() << " " << q_wi.z() << endl;
+                 << q_wi.x() << " " << q_wi.y() << " " << q_wi.z() << " " << q_wi.w() << endl;
       }
     }
     m_estimator.unlock();

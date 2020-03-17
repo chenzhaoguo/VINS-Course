@@ -22,7 +22,7 @@ std::string sConfig_path;
 std::shared_ptr<System> pSystem;
 
 void PubImuData() {
-  std::string imu_data_file = sData_path + "imu_pose_noise.txt";
+  std::string imu_data_file = sData_path + "imu_output.txt";
 	std::cout << "1 PubImuData imu_data_file: " << imu_data_file << std::endl;
   std::ifstream read_imu;
   read_imu.open(imu_data_file.c_str());
@@ -33,16 +33,12 @@ void PubImuData() {
 
   std::string imu_data_line;
   double stamp_ns = 0.0;
-  Eigen::Quaterniond Qwb;
-  Eigen::Vector3d position_twb;
   Eigen::Vector3d gyro_data;
   Eigen::Vector3d acc_data;
   /// read imu data
   while (std::getline(read_imu, imu_data_line) && !imu_data_line.empty()) {
     std::istringstream ss(imu_data_line);
-    ss >> stamp_ns >> Qwb.w() >> Qwb.x() >> Qwb.y() >> Qwb.z() >> position_twb.x() >> position_twb.y() >> position_twb.z()
-       >> gyro_data.x() >> gyro_data.y() >> gyro_data.z()
-       >> acc_data.x() >> acc_data.y() >> acc_data.z();
+    ss >> stamp_ns >> gyro_data.x() >> gyro_data.y() >> gyro_data.z() >> acc_data.x() >> acc_data.y() >> acc_data.z();
 		pSystem->PubImuData(stamp_ns, gyro_data, acc_data);
 		usleep(5000*nDelayTimes);
   }
@@ -50,7 +46,7 @@ void PubImuData() {
 }
 
 void PubImageData() {
-  std::string cam_pose_file = sData_path + "cam_pose_tum.txt";  // 给目录keyframe/中每一帧相机观测到的路标点的数据文件提供时间戳
+  std::string cam_pose_file = sData_path + "camera_pose_tum.txt";  // 给目录keyframe/中每一帧相机观测到的路标点的数据文件提供时间戳
 	std::cout << "2 PubImageData cam_pose_file: " << cam_pose_file << std::endl;
   std::ifstream read_cam_pose;
   read_cam_pose.open(cam_pose_file.c_str());
@@ -69,7 +65,7 @@ void PubImageData() {
     ss >> stamp_ns;
 
     std::stringstream points_file_corresponding;
-    points_file_corresponding << "keyframe/all_points_" << points_file_id << ".txt";
+    points_file_corresponding << "keyframe/landmarks_" << points_file_id << ".txt";
     std::string points_file = sData_path + points_file_corresponding.str();
     points_file_id++;
     std::ifstream read_points;

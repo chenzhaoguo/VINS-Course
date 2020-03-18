@@ -5,6 +5,9 @@
 #########################################################################
 #!/bin/bash
 
+rm -rf ./*.txt
+rm -rf ./keyframe
+
 cp ../../../01-chapter2_IMU/vio_data_simulation/bin/imu_output.txt .
 cp ../../../01-chapter2_IMU/vio_data_simulation/bin/groundtruth_tum.txt .
 cp ../../../01-chapter2_IMU/vio_data_simulation/bin/camera_pose_tum.txt .

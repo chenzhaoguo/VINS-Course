@@ -14,10 +14,23 @@ System::System(string sConfig_file_) : bStart_backend(true) {
   trackerData[0].readIntrinsicParameter(sConfig_file);
 
   estimator.setParameter();
-  ofs_pose.open("./estimate_result.txt",fstream::out);
+
+  /// save result: pose && orientation
+  ofs_pose.open("./estimate_result.txt", fstream::out);
   if (!ofs_pose.is_open()) {
     cerr << "ofs_pose is not open" << endl;
   }
+
+  /// save imu bias
+  ofs_acc_bias_.open("./acc_bias_estimate.txt", fstream::out);
+  if (!ofs_acc_bias_.is_open()) {
+    cerr << "ofs_acc_bias_ is not open" << endl;
+  }
+  ofs_gyro_bias_.open("./gyro_bias_estimate.txt", fstream::out);
+  if (!ofs_gyro_bias_.is_open()) {
+    cerr << "ofs_gyro_bias_ is not open" << endl;
+  }
+
   // thread thd_RunBackend(&System::process,this);
   // thd_RunBackend.detach();
   cout << "2 System() end" << endl;
@@ -42,6 +55,8 @@ System::~System() {
   m_estimator.unlock();
 
   ofs_pose.close();
+  ofs_acc_bias_.close();
+  ofs_gyro_bias_.close();
 }
 
 void System::PubImageData(double dStampSec, std::vector<Eigen::Vector2d> &feature_point) {
@@ -271,6 +286,10 @@ void System::ProcessBackEnd() {
              << " stamp: " <<  dStamp << " p_wi: " << p_wi.transpose() << endl;
         ofs_pose << fixed << dStamp << " " << p_wi(0) << " " << p_wi(1) << " " << p_wi(2) << " " 
                  << q_wi.x() << " " << q_wi.y() << " " << q_wi.z() << " " << q_wi.w() << endl;
+        Vector3d acc_bias = estimator.Bas[WINDOW_SIZE];
+        Vector3d gyro_bias = estimator.Bgs[WINDOW_SIZE];
+        ofs_acc_bias_ << fixed << dStamp << " " << acc_bias(0) << " " << acc_bias(1) << " " << acc_bias(2) << endl;
+        ofs_gyro_bias_ << fixed << dStamp << " " << gyro_bias(0) << " " << gyro_bias(1) << " " << gyro_bias(2) << endl;
       }
     }
     m_estimator.unlock();

@@ -57,10 +57,10 @@ keyframe_parallax: 10.0 # keyframe selection threshold (pixel)
 
 #imu parameters       The more accurate parameters you provide, the better performance
 # 以下参数是imu连续时间下的噪声标准差，也是标定工具标出来的值，parameters.cpp中将此值转成离散时间下的噪声标准差
-acc_n: 0.0        # accelerometer measurement noise standard deviation. #0.2   0.04
-gyr_n: 0.0        # gyroscope measurement noise standard deviation.     #0.05  0.004
-acc_w: 2.0e-3       # accelerometer bias random work noise standard deviation.  #0.02
-gyr_w: 3.0e-4       # gyroscope bias random work noise standard deviation.     #4.0e-5
+acc_n: 5.0e-2        # accelerometer measurement noise standard deviation. #0.2   0.04
+gyr_n: 6.0e-3        # gyroscope measurement noise standard deviation.     #0.05  0.004
+acc_w: 2.0e-2       # accelerometer bias random work noise standard deviation.  #0.02
+gyr_w: 3.0e-3       # gyroscope bias random work noise standard deviation.     #4.0e-5
 
 g_norm: 9.81007     # gravity magnitude
 

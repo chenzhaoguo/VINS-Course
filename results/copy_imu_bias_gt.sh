@@ -5,5 +5,7 @@
 #########################################################################
 #!/bin/bash
 
-cp ../bin/estimate_result.txt .
-cp ../simulation_data/groundtruth_tum.txt .
+rm -rf ./imu_bias_gt/*
+
+cp ../../../01-chapter2_IMU/vio_data_simulation/bin/acc_bias.txt ./imu_bias_gt/
+cp ../../../01-chapter2_IMU/vio_data_simulation/bin/gyro_bias.txt ./imu_bias_gt/

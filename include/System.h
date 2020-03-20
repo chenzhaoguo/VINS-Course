@@ -96,7 +96,10 @@ class System {
   bool init_feature = 0;
   bool init_imu = 1;
   double last_imu_t = 0;
+  
   std::ofstream ofs_pose;
+  std::ofstream ofs_acc_bias_;
+  std::ofstream ofs_gyro_bias_;
   std::vector<Eigen::Vector3d> vPath_to_draw;
   bool bStart_backend;
   std::vector<std::pair<std::vector<ImuConstPtr>, ImgConstPtr> > getMeasurements();

@@ -94,12 +94,12 @@ void PubImageData() {
 
 int main(int argc, char **argv) {
 	if (argc != 3) {
-	  cerr << "cmd: ./run_euroc PATH_TO_FOLDER/MH-05/mav0 PATH_TO_CONFIG/config\n"
-		  	 << "For example: ./run_euroc ../euroc_data/mav0/ ../config/" << endl;
+	  cerr << "cmd: ./run_euroc PATH_TO_FOLDER/euroc_data/ PATH_TO_CONFIG/config/\n"
+		  	 << "For example: ./run_euroc ../euroc_data/MH_05_difficult/ ../config/" << endl;
 		return -1;
 	}
 
-	sData_path = argv[1];    // "../euroc_data/mav0/"
+	sData_path = argv[1];    // "../euroc_data/MH_05_difficult/"
 	sConfig_path = argv[2];  // "../config/"
 
 	pSystem.reset(new System(sConfig_path));

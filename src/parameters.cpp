@@ -89,6 +89,13 @@ void readParameters(string config_file)
     COL = fsSettings["image_width"];
     // ROS_INFO("ROW: %f COL: %f ", ROW, COL);
 
+	  /// 将simulation_config.yaml配置文件中设置的连续时间下的噪声标准差转换为离散时间下的值
+    float dt = 1.0 / 200.0;
+    ACC_N /= sqrt(dt);
+    GYR_N /= sqrt(dt);
+    ACC_W *= sqrt(dt);
+    GYR_W *= sqrt(dt);
+
     ESTIMATE_EXTRINSIC = fsSettings["estimate_extrinsic"];
     if (ESTIMATE_EXTRINSIC == 2)
     {

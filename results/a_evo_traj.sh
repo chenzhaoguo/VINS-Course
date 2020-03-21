@@ -5,5 +5,4 @@
 #########################################################################
 #!/bin/bash
 
-evo_traj tum --ref=./groundtruth.tum ./estimate_result.txt -a -p -v 
-# evo_traj tum --ref=./groundtruth.tum ./pose_output_source_result.txt ./pose_output_first_result.txt ./estimate_result.txt -a -p -v 
+evo_traj tum --ref=./groundtruth_MH_05.tum ./estimate_result.txt -a -p -v

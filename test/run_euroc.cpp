@@ -95,7 +95,7 @@ void PubImageData() {
 int main(int argc, char **argv) {
 	if (argc != 3) {
 	  cerr << "cmd: ./run_euroc PATH_TO_FOLDER/euroc_data/ PATH_TO_CONFIG/config/\n"
-		  	 << "For example: ./run_euroc ../euroc_data/MH_05_difficult/ ../config/" << endl;
+		  	 << "For example: ./run_euroc ../euroc_data/MH_02_easy/ ../config/" << endl;
 		return -1;
 	}
 

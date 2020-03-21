@@ -5,4 +5,4 @@
 #########################################################################
 #!/bin/bash
 
-cp ../euroc_data/MH_05_difficult/groundtruth.tum ./groundtruth_MH_05.tum
+cp ../euroc_data/MH_02_easy/groundtruth.tum ./groundtruth_MH_02.tum

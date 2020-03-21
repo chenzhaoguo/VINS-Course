@@ -7,6 +7,6 @@
 
 rm -rf *.zip
 
-evo_rpe tum ./groundtruth_MH_05.tum ./estimate_result.txt -a --save_results ./estimate_result.zip
-evo_rpe tum ./groundtruth_MH_05.tum ./estimate_result_base.txt -a --save_results ./estimate_result_base.zip
+evo_rpe tum ./groundtruth_MH_02.tum ./estimate_result.txt -a --save_results ./estimate_result.zip
+evo_rpe tum ./groundtruth_MH_02.tum ./estimate_result_base.txt -a --save_results ./estimate_result_base.zip
 evo_res ./*.zip -p

@@ -10,6 +10,7 @@
 *.nav
 *.so
 *.zip
+*.pyc
 
 .vscode/
 build/

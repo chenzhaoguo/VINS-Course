@@ -12,6 +12,7 @@
 #include <math.h>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/Geometry>
 
 Eigen::Vector3d Quaterniond2EulerAngle(const Eigen::Quaterniond &q) {
   Eigen::Vector3d euler;  // [roll, pitch, yaw]
@@ -51,17 +52,43 @@ void SaveData(std::string filename, std::map<double, Eigen::Vector3d> &time_eule
   }
 }
 
-int main() {
-  std::string read_file = "./match_gt_estimate.txt";
+/// InputFile(Tum file): timestamp px py pz qx qy qz qw.  OutputFile: timestamp roll pitch yaw
+void TumQuat2Euler(std::string filename, std::map<double, Eigen::Vector3d> &time_euler) {
   std::ifstream read_data;
-  read_data.open(read_file.c_str());
+  read_data.open(filename.c_str());
   if (!read_data.is_open()) {
-    std::cerr << "Fail to open read_file: " << read_file << std::endl;
-    return -1;
+    std::cerr << "Fail to open read_file: " << filename << std::endl;
+    return;
   }
 
-  double time_stamp_gt = 0.0;
-  double time_stamp_estimate = 0.0;
+  long double time_stamp = 0.0;
+  Eigen::Vector3d pose;
+  Eigen::Quaterniond q;
+  Eigen::Vector3d euler;
+
+  std::string data_line;
+  while (std::getline(read_data, data_line) && !data_line.empty()) {
+    std::istringstream ss(data_line);
+    ss >> time_stamp >> pose.x() >> pose.y() >> pose.z() >> q.x() >> q.y() >> q.z() >> q.w();
+
+    euler = Quaterniond2EulerAngle(q);
+    // euler = q.toRotationMatrix().eulerAngles(2,1,0);
+    euler =  euler * 180 / M_PI;
+    time_euler.insert(std::make_pair(time_stamp, euler));
+  }
+	read_data.close();
+}
+
+void CalEulerErr(std::string filename, std::map<double, Eigen::Vector3d> &diff_euler_all) {
+  std::ifstream read_data;
+  read_data.open(filename.c_str());
+  if (!read_data.is_open()) {
+    std::cerr << "Fail to open read_file: " << filename << std::endl;
+    return;
+  }
+
+  long double time_stamp_gt = 0.0;
+  long double time_stamp_estimate = 0.0;
 
   Eigen::Vector3d pose_gt;
   Eigen::Vector3d pose_estimate;
@@ -71,9 +98,6 @@ int main() {
   Eigen::Vector3d euler_gt;
   Eigen::Vector3d euler_estimate;
   Eigen::Vector3d diff_euler;
-  std::map<double, Eigen::Vector3d> euler_gt_all;
-  std::map<double, Eigen::Vector3d> euler_estimate_all;
-  std::map<double, Eigen::Vector3d> diff_euler_all;
 
   std::string data_line;
   while (std::getline(read_data, data_line) && !data_line.empty()) {
@@ -82,21 +106,38 @@ int main() {
        >> time_stamp_estimate >> pose_estimate.x() >> pose_estimate.y() >> pose_estimate.z() >> q_estimate.x() >> q_estimate.y() >> q_estimate.z() >> q_estimate.w();
 
     euler_gt = Quaterniond2EulerAngle(q_gt);
+    // euler_gt = q_gt.toRotationMatrix().eulerAngles(2,1,0);
     euler_gt =  euler_gt * 180 / M_PI;
     euler_estimate = Quaterniond2EulerAngle(q_estimate);
-    euler_estimate =  euler_estimate * 180 / M_PI + Eigen::Vector3d(0, 0, 25);  // align to groundtruth
+    // euler_estimate = q_estimate.toRotationMatrix().eulerAngles(2,1,0);
+    euler_estimate =  euler_estimate * 180 / M_PI + Eigen::Vector3d(0, 0, 27.5);  // align to groundtruth
     diff_euler = euler_estimate - euler_gt;
-
-    euler_gt_all.insert(std::make_pair(time_stamp_gt, euler_gt));
-    euler_estimate_all.insert(std::make_pair(time_stamp_gt, euler_estimate));
     diff_euler_all.insert(std::make_pair(time_stamp_gt, diff_euler));
   }
+	read_data.close();
+}
 
+int main() {
+  /// groundtruth_MH_04.tum最后4列的四元数转换为欧拉角
+  std::string gt_file = "./groundtruth_MH_04.tum";
+  std::map<double, Eigen::Vector3d> euler_gt_all;
+  TumQuat2Euler(gt_file, euler_gt_all);
   SaveData("euler_gt.txt", euler_gt_all);
-  SaveData("euler_estimate.txt", euler_estimate_all);
+
+  std::string est_file = "./estimate_result.txt";
+  std::map<double, Eigen::Vector3d> euler_est_all;
+  TumQuat2Euler(est_file, euler_est_all);
+  for (auto iter = euler_est_all.begin(); iter != euler_est_all.end(); ++iter) {
+    // Eigen::Vector3d euler = iter->second;
+    iter->second += Eigen::Vector3d(0, 0, 26);
+  }
+  SaveData("euler_estimate.txt", euler_est_all);
+  
+  /// 计算aligned后的欧拉角误差
+  std::string match_file = "./match_gt_estimate.txt";
+  std::map<double, Eigen::Vector3d> diff_euler_all;
+  CalEulerErr(match_file, diff_euler_all);
   SaveData("euler_error.txt", diff_euler_all);
 
-	read_data.close();
-  
   return 0;
 }

@@ -119,7 +119,7 @@ void CalEulerErr(std::string filename, std::map<double, Eigen::Vector3d> &diff_e
 
 int main() {
   /// groundtruth_MH_04.tum最后4列的四元数转换为欧拉角
-  std::string gt_file = "./groundtruth_MH_04.tum";
+  std::string gt_file = "./groundtruth_V1_01.tum";
   std::map<double, Eigen::Vector3d> euler_gt_all;
   TumQuat2Euler(gt_file, euler_gt_all);
   SaveData("euler_gt.txt", euler_gt_all);

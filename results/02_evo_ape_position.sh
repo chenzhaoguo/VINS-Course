@@ -5,4 +5,4 @@
 #########################################################################
 #!/bin/bash
 
-evo_ape tum ./groundtruth_MH_04.tum ./estimate_result.txt -a -p
+evo_ape tum ./groundtruth_V1_01.tum ./estimate_result.txt -a -p

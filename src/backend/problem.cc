@@ -191,8 +191,8 @@ bool Problem::Solve(int iterations) {
       // if (delta_x_.squaredNorm() <= 1e-6 || false_cnt > 10)
       /// TODO:: 退出条件还是有问题, 好多次误差都没变化了，还在迭代计算，应该搞一个误差不变了就中止
       // if ( false_cnt > 10) {
-      // stop = true;
-      // break;
+      //   stop = true;
+      //   break;
       // }
 
       /// 更新状态量
@@ -223,7 +223,7 @@ bool Problem::Solve(int iterations) {
     /// TODO:: 应该改成前后两次的误差已经不再变化
     // if (sqrt(currentChi_) <= stopThresholdLM_)
     // if (sqrt(currentChi_) < 1e-15)
-    if(last_chi_ - currentChi_ < 1e-5) {
+    if (last_chi_ - currentChi_ < 1e-5) {
        std::cout << "sqrt(currentChi_) <= stopThresholdLM_" << std::endl;
        stop = true;
     }

@@ -15,6 +15,10 @@ import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+np.set_printoptions(suppress = True)
+groundtruth_file = os.path.abspath('.') + "/groundtruth_V1_01.tum"
+estimate_file = os.path.abspath('.') + "/estimate_result.txt"
+
 def align(model,data):
     """Align two trajectories using the method of Horn (closed-form).
     Input:
@@ -94,8 +98,8 @@ if __name__=="__main__":
     parser.add_argument('--save', help='save associated first and aligned second trajectory to disk (format: stamp1 x1 y1 z1 qx1 qy1 qz1 qw1 stamp2 x2 y2 z2 qx2 qy2 qz2 qw2)')
     args = parser.parse_args()
 
-    first_list = associate.read_file_list("./groundtruth_MH_04.tum")
-    second_list = associate.read_file_list("./estimate_result.txt")
+    first_list = associate.read_file_list(groundtruth_file)
+    second_list = associate.read_file_list(estimate_file)
     matches = associate.associate(first_list, second_list, float(args.offset), float(args.max_difference))    
     if len(matches)<2:
         sys.exit("Couldn't find matching timestamp pairs between groundtruth and estimated trajectory! Did you choose the correct sequence?")
@@ -125,9 +129,9 @@ if __name__=="__main__":
     print "APE.max %f m"%np.max(trans_error)
 
     ###    plot trajectory    ###
-    traj_gt_time = np.loadtxt('./groundtruth_MH_04.tum', usecols=(0))
+    traj_gt_time = np.loadtxt(groundtruth_file, usecols=(0))
     traj_gt_time_relative = traj_gt_time - traj_gt_time[0]
-    traj_gt = np.loadtxt('./groundtruth_MH_04.tum', usecols=(1, 2, 3))
+    traj_gt = np.loadtxt(groundtruth_file, usecols=(1, 2, 3))
     fig = plt.figure(1)
     ax = fig.gca(projection='3d')
     plt.plot(traj_gt[:,0], traj_gt[:,1], traj_gt[:,2], '--', linewidth=1.0, color="red", label='groundtruth')

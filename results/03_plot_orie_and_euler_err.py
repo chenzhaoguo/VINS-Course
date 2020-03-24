@@ -11,13 +11,14 @@ from mpl_toolkits.mplot3d import Axes3D
 import associate
 
 np.set_printoptions(suppress = True)
-filepath = os.path.abspath('.') + "/"
+groundtruth_file = os.path.abspath('.') + "/groundtruth_V1_01.tum"
+estimate_file = os.path.abspath('.') + "/estimate_result.txt"
 
 ###    plot orientaiton r/p/y    ###
-euler_gt_time = np.loadtxt('./groundtruth_MH_04.tum', usecols=(0))
+euler_gt_time = np.loadtxt(groundtruth_file, usecols=(0))
 euler_gt_time_relative = euler_gt_time - euler_gt_time[0]
 euler_gt = np.loadtxt(filepath + 'euler_gt.txt', usecols=(1, 2, 3))
-euler_est_time = np.loadtxt('./estimate_result.txt', usecols=(0))
+euler_est_time = np.loadtxt(estimate_file, usecols=(0))
 euler_est_time_relative = euler_est_time - euler_gt_time[0]
 euler_estimate = np.loadtxt(filepath + 'euler_estimate.txt', usecols=(1, 2, 3))
 fig = plt.figure(1)
@@ -40,7 +41,7 @@ plt.legend(loc='upper right', fontsize=6, edgecolor='black')
 plt.grid(linestyle="--")
 
 ########  plot orientation error  ########
-first_list = associate.read_file_list("./groundtruth_MH_04.tum")
+first_list = associate.read_file_list(groundtruth_file)
 second_list = associate.read_file_list("./estimate_result.txt")
 matches = associate.associate(first_list, second_list, 0.0, 0.02)
 time = []

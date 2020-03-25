@@ -45,8 +45,7 @@ class Vertex {
   void BackUpParameters() { parameters_backup_ = parameters_; }
   void RollBackParameters() { parameters_ = parameters_backup_; }
 
-  /// 加法，可重定义
-  /// 默认是向量加
+  /// 加法，可重定义，默认是向量加
   virtual void Plus(const VecX &delta);
 
   /// 返回顶点的名称，在子类中实现

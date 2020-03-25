@@ -10,18 +10,16 @@ namespace backend {
 /**
  * SpeedBias vertex
  * parameters: v, ba, bg 9 DoF
- * 
  */
 class VertexSpeedBias : public Vertex {
-public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+ public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
-    VertexSpeedBias() : Vertex(9) {}
+  VertexSpeedBias() : Vertex(9) {}
 
-    std::string TypeInfo() const {
-        return "VertexSpeedBias";
-    }
-
+  std::string TypeInfo() const {
+    return "VertexSpeedBias";
+  }
 };
 
 }

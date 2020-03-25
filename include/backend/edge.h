@@ -97,8 +97,8 @@ class Edge {
 
    MatXX SqrtInformation() const { return sqrt_information_; }
 
-   void SetLossFunction(LossFunction* ptr){ lossfunction_ = ptr; }
-   LossFunction* GetLossFunction(){ return lossfunction_;}
+   void SetLossFunction(LossFunction* ptr) { lossfunction_ = ptr; }
+   LossFunction* GetLossFunction() { return lossfunction_; }
    void RobustInfo(double& drho, MatXX& info) const;
 
    /// 设置观测信息

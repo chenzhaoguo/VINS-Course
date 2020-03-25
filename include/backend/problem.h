@@ -71,15 +71,15 @@ class Problem {
   bool Marginalize(const std::shared_ptr<Vertex> frameVertex);
   bool Marginalize(const std::vector<std::shared_ptr<Vertex> > frameVertex,int pose_dim);
 
-  MatXX GetHessianPrior(){ return H_prior_;}
-  VecX GetbPrior(){ return b_prior_;}
-  VecX GetErrPrior(){ return err_prior_;}
-  MatXX GetJtPrior(){ return Jt_prior_inv_;}
+  MatXX GetHessianPrior() { return H_prior_; }
+  VecX GetbPrior() { return b_prior_; }
+  VecX GetErrPrior() { return err_prior_; }
+  MatXX GetJtPrior() { return Jt_prior_inv_; }
 
-  void SetHessianPrior(const MatXX& H){H_prior_ = H;}
-  void SetbPrior(const VecX& b){b_prior_ = b;}
-  void SetErrPrior(const VecX& b){err_prior_ = b;}
-  void SetJtPrior(const MatXX& J){Jt_prior_inv_ = J;}
+  void SetHessianPrior(const MatXX& H) { H_prior_ = H; }
+  void SetbPrior(const VecX& b) { b_prior_ = b; }
+  void SetErrPrior(const VecX& b) { err_prior_ = b; }
+  void SetJtPrior(const MatXX& J) { Jt_prior_inv_ = J; }
 
   void ExtendHessiansPriorSize(int dim);
 

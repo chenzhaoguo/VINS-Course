@@ -5,4 +5,4 @@
 #########################################################################
 #!/bin/bash
 
-evo_traj tum --ref=./groundtruth_tum.txt ./estimate_has_prior.txt ./estimate_no_prior.txt -a -p
+evo_traj tum --ref=./groundtruth_tum.txt ./estimate_has_prior.txt ./estimate_no_prior.txt -a -p -v

@@ -5,6 +5,6 @@
 #########################################################################
 #!/bin/bash
 
-rm -rf ./groundtruth_tum.txt
+rm -rf ./estimate_result.txt
 
-cp ../simulation_data/groundtruth_tum.txt .
+cp ../bin/estimate_result.txt ./

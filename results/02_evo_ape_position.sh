@@ -5,6 +5,4 @@
 #########################################################################
 #!/bin/bash
 
-rm -rf ./groundtruth_tum.txt
-
-cp ../simulation_data/groundtruth_tum.txt .
+evo_ape tum ./groundtruth_MH_04.tum ./estimate_result.txt -a -p

@@ -5,6 +5,5 @@
 #########################################################################
 #!/bin/bash
 
-rm -rf ./groundtruth_tum.txt
-
-cp ../simulation_data/groundtruth_tum.txt .
+cp ../bin/acc_bias_estimate.txt ./
+cp ../bin/gyro_bias_estimate.txt ./

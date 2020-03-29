@@ -9,4 +9,4 @@ rm -rf *.zip
 
 evo_ape tum ./groundtruth_tum.txt ./estimate_has_prior.txt -a -r angle_deg --save_results ./estimate_has_prior.zip
 evo_ape tum ./groundtruth_tum.txt ./estimate_no_prior.txt -a -r angle_deg --save_results ./estimate_no_prior.zip
-evo_res ./*.zip  -p
+evo_res ./*.zip -p

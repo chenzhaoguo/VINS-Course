@@ -7,5 +7,5 @@
 
 rm -rf ./imu_bias_gt/*
 
-cp ../../../01-chapter2_IMU/vio_data_simulation/bin/acc_bias.txt ./imu_bias_gt/
-cp ../../../01-chapter2_IMU/vio_data_simulation/bin/gyro_bias.txt ./imu_bias_gt/
+cp ../../../01-chapter2_IMU/vio_data_simulation/bin/acc_bias_gt.txt ./imu_bias_gt/
+cp ../../../01-chapter2_IMU/vio_data_simulation/bin/gyro_bias_gt.txt ./imu_bias_gt/

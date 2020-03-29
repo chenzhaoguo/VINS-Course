@@ -7,6 +7,7 @@ This script computes the absolute trajectory error from the ground truth
 trajectory and the estimated trajectory.
 """
 
+import os
 import sys
 import numpy as np
 import argparse
@@ -14,6 +15,9 @@ import associate
 import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+
+file_gt = os.path.abspath('.') + '/groundtruth_tum.txt'
+file_estimate = os.path.abspath('.') + '/estimate_result.txt'
 
 def align(model,data):
     """Align two trajectories using the method of Horn (closed-form).
@@ -79,7 +83,7 @@ def plot_traj(ax, stamps, traj, style, linewidth, color, label):
         last= stamps[i]
     if len(x)>0:
         ax.plot(x, y, z, style, linewidth=linewidth, color=color, label=label)
-    
+
 
 if __name__=="__main__":
     # parse command line
@@ -94,8 +98,8 @@ if __name__=="__main__":
     parser.add_argument('--save', help='save associated first and aligned second trajectory to disk (format: stamp1 x1 y1 z1 qx1 qy1 qz1 qw1 stamp2 x2 y2 z2 qx2 qy2 qz2 qw2)')
     args = parser.parse_args()
 
-    first_list = associate.read_file_list("./groundtruth_MH_04.tum")
-    second_list = associate.read_file_list("./estimate_result.txt")
+    first_list = associate.read_file_list(file_gt)
+    second_list = associate.read_file_list(file_estimate)
     matches = associate.associate(first_list, second_list, float(args.offset), float(args.max_difference))    
     if len(matches)<2:
         sys.exit("Couldn't find matching timestamp pairs between groundtruth and estimated trajectory! Did you choose the correct sequence?")
@@ -125,18 +129,20 @@ if __name__=="__main__":
     print "APE.max %f m"%np.max(trans_error)
 
     ###    plot trajectory    ###
-    traj_gt_time = np.loadtxt('./groundtruth_MH_04.tum', usecols=(0))
+    traj_gt_time = np.loadtxt(file_gt, usecols=(0))
     traj_gt_time_relative = traj_gt_time - traj_gt_time[0]
-    traj_gt = np.loadtxt('./groundtruth_MH_04.tum', usecols=(1, 2, 3))
-    fig = plt.figure(1)
-    ax = fig.gca(projection='3d')
-    plt.plot(traj_gt[:,0], traj_gt[:,1], traj_gt[:,2], '--', linewidth=1.0, color="red", label='groundtruth')
-    plot_traj(ax, second_stamps, second_xyz_full_aligned.transpose().A, '-', 0.7, "blue", "estimate_result")
-    ax.legend(loc='upper right', fontsize=8, edgecolor='black')
-    ax.set_xlabel('x [m]')
-    ax.set_ylabel('y [m]')
-    ax.set_zlabel('z [m]')
-    plt.grid(linestyle="--")
+    traj_gt = np.loadtxt(file_gt, usecols=(1, 2, 3))
+    fig1 = plt.figure(num=1, figsize=(6, 4))
+    ax1 = fig1.gca(projection='3d')
+    ax1.plot(traj_gt[:,0], traj_gt[:,1], traj_gt[:,2], linestyle='--', linewidth=1.0, color='r', label='groundtruth')
+    ax1.plot([traj_gt[0, 0]], [traj_gt[0, 1]], [traj_gt[0, 2]], 'o', markersize=3, color='r', label='start point')
+    plot_traj(ax1, second_stamps, second_xyz_full_aligned.transpose().A, '-', 0.8, 'b', 'estimate_result')
+    ax1.set_xlabel('x [m]', fontsize=10)
+    ax1.set_ylabel('y [m]', fontsize=10)
+    ax1.set_zlabel('z [m]', fontsize=10)
+    ax1.tick_params(labelsize=9)
+    ax1.legend(loc='upper right', fontsize=8, edgecolor='w')
+    ax1.grid(linestyle="--")
 
     ###    plot trajectory x/y/z    ###
     time1 = []
@@ -148,24 +154,27 @@ if __name__=="__main__":
         pose_x_est.append(x2)
         pose_y_est.append(y2)
         pose_z_est.append(z2)
-    fig = plt.figure(2)
-    plt.subplot(311)
-    plt.plot(traj_gt_time_relative, traj_gt[:,0], '--', linewidth=1.2, color="red", label='groundtruth')
-    plt.plot(time1, pose_x_est, '-', linewidth=0.7, color="blue", label='estimate_result')
-    plt.ylabel('x [m]')
-    plt.legend(loc='upper right', fontsize=6, edgecolor='black')
-    plt.grid(linestyle="--")
-    plt.subplot(312)
-    plt.plot(traj_gt_time_relative, traj_gt[:,1], '--', linewidth=1.2, color="red")
-    plt.plot(time1, pose_y_est, '-', linewidth=0.7, color="blue")
-    plt.ylabel('y [m]')
-    plt.grid(linestyle="--")
-    plt.subplot(313)
-    plt.plot(traj_gt_time_relative, traj_gt[:,2], '--', linewidth=1.2, color="red")
-    plt.plot(time1, pose_z_est, '-', linewidth=0.7, color="blue")
-    plt.ylabel('z [m]')
-    plt.xlabel('t [s]')
-    plt.grid(linestyle="--")
+    fig2, (ax21, ax22, ax23) = plt.subplots(3, 1, figsize=(6, 3.5), sharex=True)
+    ## x
+    ax21.plot(traj_gt_time_relative, traj_gt[:,0], linestyle='--', linewidth=1.0, color='r', label='groundtruth')
+    ax21.plot(time1, pose_x_est, linestyle='-', linewidth=0.8, color='b', label='estimate_result')
+    ax21.set_ylabel('x [m]', fontsize=10)
+    ax21.tick_params(labelsize=9)
+    ax21.legend(loc='upper right', fontsize=6, edgecolor='w')
+    ax21.grid(linestyle="--")
+    ## y
+    ax22.plot(traj_gt_time_relative, traj_gt[:,1], linestyle='--', linewidth=1.0, color='r', label='groundtruth')
+    ax22.plot(time1, pose_y_est, linestyle='-', linewidth=0.8, color='b', label='estimate_result')
+    ax22.set_ylabel('y [m]', fontsize=10)
+    ax22.tick_params(labelsize=9)
+    ax22.grid(linestyle="--")
+    ## z
+    ax23.plot(traj_gt_time_relative, traj_gt[:,2], linestyle='--', linewidth=1.0, color='r', label='groundtruth')
+    ax23.plot(time1, pose_z_est, linestyle='-', linewidth=0.8, color='b', label='estimate_result')
+    ax23.set_xlabel('t [s]', fontsize=10)
+    ax23.set_ylabel('z [m]', fontsize=10)
+    ax23.tick_params(labelsize=9)
+    ax23.grid(linestyle="--")
 
     ###    plot position error of x/y/z    ###
     time2 = []
@@ -177,14 +186,15 @@ if __name__=="__main__":
         diff_x.append(x2-x1)
         diff_y.append(y2-y1)
         diff_z.append(z2-z1)
-    fig = plt.figure(3)
-    plt.plot(time2, diff_x, linewidth=1.0, color="red", label='x')
-    plt.plot(time2, diff_y, linewidth=1.0, color="green", label='y')
-    plt.plot(time2, diff_z, linewidth=1.0, color="blue", label='z')
-    plt.xlabel('t [s]')
-    plt.ylabel('positon error[m]')
-    plt.legend(loc='upper right', fontsize=8, edgecolor='black')
-    plt.grid(linestyle="--")
+    fig3, ax3 = plt.subplots(figsize=(6, 2))
+    ax3.plot(time2, diff_x, linewidth=1.0, color='r', label='x')
+    ax3.plot(time2, diff_y, linewidth=1.0, color='g', label='y')
+    ax3.plot(time2, diff_z, linewidth=1.0, color='b', label='z')
+    ax3.set_xlabel('t [s]', fontsize=10)
+    ax3.set_ylabel('positon error [m]', fontsize=10)
+    ax3.tick_params(labelsize=9)
+    ax3.legend(loc='upper right', fontsize=8, edgecolor='w')
+    ax3.grid(linestyle="--")
 
     plt.show()
     

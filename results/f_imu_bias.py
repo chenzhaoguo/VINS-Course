@@ -7,7 +7,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-np.set_printoptions(suppress = True)
 filepath_estimate = os.path.abspath('..') + "/bin"
 filepath_gt = os.path.abspath('./imu_bias_gt')
 
@@ -45,8 +44,8 @@ plt.grid(linestyle="--")
 
 ########  imu bias groundtruth  ########
 acc_bias_gt = []
-acc_bias_gt_x = np.loadtxt(filepath_gt + '/acc_bias.txt', usecols = (col_index))
-acc_bias_gt = np.loadtxt(filepath_gt + '/acc_bias.txt', usecols = (col_index+1, col_index+2, col_index+3))
+acc_bias_gt_x = np.loadtxt(filepath_gt + '/acc_bias_gt.txt', usecols = (col_index))
+acc_bias_gt = np.loadtxt(filepath_gt + '/acc_bias_gt.txt', usecols = (col_index+1, col_index+2, col_index+3))
 ## 画图: acc bias groundtruth
 fig = plt.figure(3)
 plt.plot(acc_bias_gt_x, acc_bias_gt[:, 0], linewidth=1.0, color="red", label='X')
@@ -59,8 +58,8 @@ plt.legend(loc='upper right', fontsize=8, edgecolor='black')
 plt.grid(linestyle="--")
 
 gyro_bias_gt = []
-gyro_bias_gt_x = np.loadtxt(filepath_gt + '/gyro_bias.txt', usecols = (col_index))
-gyro_bias_gt = np.loadtxt(filepath_gt + '/gyro_bias.txt', usecols = (col_index+1, col_index+2, col_index+3))
+gyro_bias_gt_x = np.loadtxt(filepath_gt + '/gyro_bias_gt.txt', usecols = (col_index))
+gyro_bias_gt = np.loadtxt(filepath_gt + '/gyro_bias_gt.txt', usecols = (col_index+1, col_index+2, col_index+3))
 ## 画图: gyro bias groundtruth
 fig = plt.figure(4)
 plt.plot(gyro_bias_gt_x, gyro_bias_gt[:, 0], linewidth=1.0, color="red", label='X')
@@ -76,7 +75,7 @@ plt.grid(linestyle="--")
 ########  imu bias error  ########
 row_index = np.arange(248, 3989, 20)
 acc_data_gt_select = []
-with open(filepath_gt + '/acc_bias.txt', 'r') as f:
+with open(filepath_gt + '/acc_bias_gt.txt', 'r') as f:
     data = f.readlines()
     for i in row_index:
         line = data[i-1][:-1].split()
@@ -97,7 +96,7 @@ plt.legend(loc='upper right', fontsize=8, edgecolor='black')
 plt.grid(linestyle="--")
 
 gyro_data_gt_select = []
-with open(filepath_gt + '/gyro_bias.txt', 'r') as f:
+with open(filepath_gt + '/gyro_bias_gt.txt', 'r') as f:
     data = f.readlines()
     for i in row_index:
         line = data[i-1][:-1].split()

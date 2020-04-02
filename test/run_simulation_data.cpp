@@ -40,6 +40,7 @@ void PubImuData() {
     std::istringstream ss(imu_data_line);
     ss >> stamp_ns >> gyro_data.x() >> gyro_data.y() >> gyro_data.z() >> acc_data.x() >> acc_data.y() >> acc_data.z();
 		pSystem->PubImuData(stamp_ns, gyro_data, acc_data);
+		// usleep(1000000*1.0/200);
 		usleep(5000*nDelayTimes);
   }
 	read_imu.close();
@@ -85,6 +86,7 @@ void PubImageData() {
       feature_point.push_back(feature_c);
     }
 		pSystem->PubImageData(stamp_ns, feature_point);
+		// usleep(1000000*2.0/20);
 		usleep(50000*nDelayTimes);
     read_points.close();
   }

@@ -475,10 +475,11 @@ void Problem::ComputeLambdaInitLM() {
     currentChi_ = 0.0;
 
     for (auto edge: edges_) {
-        currentChi_ += edge.second->RobustChi2();
+      currentChi_ += edge.second->RobustChi2();
     }
-    if (err_prior_.rows() > 0)
-        currentChi_ += err_prior_.squaredNorm();
+    if (err_prior_.rows() > 0) {
+      currentChi_ += err_prior_.squaredNorm();
+    }
     currentChi_ *= 0.5;
 
     stopThresholdLM_ = 1e-10 * currentChi_;          // 迭代条件为 误差下降 1e-6 倍
@@ -514,21 +515,20 @@ void Problem::RemoveLambdaHessianLM() {
 }
 
 bool Problem::IsGoodStepInLM() {
-    double scale = 0;
-//    scale = 0.5 * delta_x_.transpose() * (currentLambda_ * delta_x_ + b_);
-//    scale += 1e-3;    // make sure it's non-zero :)
-    scale = 0.5* delta_x_.transpose() * (currentLambda_ * delta_x_ + b_);
-    scale += 1e-6;    // make sure it's non-zero :)
+  double scale = 0;
+  scale = 0.5* delta_x_.transpose() * (currentLambda_ * delta_x_ + b_);
+  scale += 1e-6;    // make sure it's non-zero :)
 
-    // recompute residuals after update state
-    double tempChi = 0.0;
-    for (auto edge: edges_) {
-        edge.second->ComputeResidual();
-        tempChi += edge.second->RobustChi2();
-    }
-    if (err_prior_.size() > 0)
-        tempChi += err_prior_.squaredNorm();
-    tempChi *= 0.5;          // 1/2 * err^2
+  // recompute residuals after update state
+  double tempChi = 0.0;
+  for (auto edge: edges_) {
+    edge.second->ComputeResidual();
+    tempChi += edge.second->RobustChi2();
+  }
+  if (err_prior_.size() > 0) {
+    tempChi += err_prior_.squaredNorm();
+  }
+  tempChi *= 0.5;          // 1/2 * err^2
 
   double rho = (currentChi_ - tempChi) / scale;
   if (rho > 0 && isfinite(tempChi)) {   // last step was good, 误差在下降

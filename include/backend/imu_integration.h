@@ -17,10 +17,10 @@ public:
      */
     explicit IMUIntegration(const Vec3 &ba, const Vec3 &bg) : ba_(ba), bg_(bg) {
         const Mat33 i3 = Mat33::Identity();
-        noise_measurement_.block<3, 3>(0, 0) = (acc_noise_ * acc_noise_) * i3;
-        noise_measurement_.block<3, 3>(3, 3) = (gyr_noise_ * gyr_noise_) * i3;
-        noise_random_walk_.block<3, 3>(0, 0) = (acc_random_walk_ * acc_random_walk_) * i3;
-        noise_random_walk_.block<3, 3>(3, 3) = (gyr_random_walk_ * gyr_random_walk_) * i3;
+        noise_measurement_.block<3, 3>(0, 0) = acc_noise_ * i3;
+        noise_measurement_.block<3, 3>(3, 3) = gyr_noise_ * i3;
+        noise_random_walk_.block<3, 3>(0, 0) = acc_random_walk_ * i3;
+        noise_random_walk_.block<3, 3>(3, 3) = gyr_random_walk_ * i3;
     }
 
     ~IMUIntegration() {}
@@ -156,13 +156,13 @@ private:
     Mat66 noise_measurement_ = Mat66::Identity();
     Mat66 noise_random_walk_ = Mat66::Identity();
 
-    /**@brief accelerometer measurement noise standard deviation*/
-    constexpr static double acc_noise_ = 0.2;
-    /**@brief gyroscope measurement noise standard deviation*/
-    constexpr static double gyr_noise_ = 0.02;
-    /**@brief accelerometer bias random walk noise standard deviation*/
-    constexpr static double acc_random_walk_ = 0.0002;
-    /**@brief gyroscope bias random walk noise standard deviation*/
+    /**@brief accelerometer measurement noise variance*/
+    constexpr static double acc_noise_ = 2.0e-3;
+    /**@brief gyroscope measurement noise variance*/
+    constexpr static double gyr_noise_ = 1.7e-3;
+    /**@brief accelerometer bias random walk noise variance*/
+    constexpr static double acc_random_walk_ = 3.0e-3;
+    /**@brief gyroscope bias random walk noise variance*/
     constexpr static double gyr_random_walk_ = 2.0e-5;
 };
 

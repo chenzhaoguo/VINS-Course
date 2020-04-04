@@ -110,8 +110,7 @@ void CalEulerErr(std::string filename, std::map<double, Eigen::Vector3d> &diff_e
     euler_gt =  euler_gt * 180 / M_PI;
     euler_estimate = Quaterniond2EulerAngle(q_estimate);
     // euler_estimate = q_estimate.toRotationMatrix().eulerAngles(2,1,0);
-    // euler_estimate =  euler_estimate * 180 / M_PI + Eigen::Vector3d(0, 0, 27.5);  // align to groundtruth
-    euler_estimate =  euler_estimate * 180 / M_PI;
+    euler_estimate =  euler_estimate * 180 / M_PI + Eigen::Vector3d(0, 0, 1.8);  // align to groundtruth
     diff_euler = euler_estimate - euler_gt;
     diff_euler_all.insert(std::make_pair(time_stamp_gt, diff_euler));
   }
@@ -119,7 +118,7 @@ void CalEulerErr(std::string filename, std::map<double, Eigen::Vector3d> &diff_e
 }
 
 int main() {
-  /// groundtruth_MH_04.tum最后4列的四元数转换为欧拉角
+  /// groundtruth_tum.txt最后4列的四元数转换为欧拉角
   std::string gt_file = "./groundtruth_tum.txt";
   std::map<double, Eigen::Vector3d> euler_gt_all;
   TumQuat2Euler(gt_file, euler_gt_all);
@@ -128,10 +127,9 @@ int main() {
   std::string est_file = "./estimate_result.txt";
   std::map<double, Eigen::Vector3d> euler_est_all;
   TumQuat2Euler(est_file, euler_est_all);
-  // for (auto iter = euler_est_all.begin(); iter != euler_est_all.end(); ++iter) {
-  //   // Eigen::Vector3d euler = iter->second;
-  //   iter->second += Eigen::Vector3d(0, 0, 26);
-  // }
+  for (auto iter = euler_est_all.begin(); iter != euler_est_all.end(); ++iter) {
+    iter->second += Eigen::Vector3d(0, 0, 1.8);
+  }
   SaveData("euler_estimate.txt", euler_est_all);
   
   /// 计算aligned后的欧拉角误差

@@ -93,13 +93,8 @@ void readParameters(string config_file)
     float dt = 1.0 / 200.0;
     ACC_N /= sqrt(dt);
     GYR_N /= sqrt(dt);
-    ACC_W *= sqrt(dt);
-    GYR_W *= sqrt(dt);
-
-    ACC_N = sqrt(ACC_N);
-    GYR_N = sqrt(GYR_N);
-    ACC_W = sqrt(ACC_W);
-    GYR_W = sqrt(GYR_W);
+    ACC_W /= sqrt(dt);
+    GYR_W /= sqrt(dt);
 
     ESTIMATE_EXTRINSIC = fsSettings["estimate_extrinsic"];
     if (ESTIMATE_EXTRINSIC == 2)

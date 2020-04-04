@@ -72,7 +72,7 @@ insert_ax.plot(time, diff_euler[:, 0], linewidth=1.0, color='r', label='roll')
 insert_ax.plot(time, diff_euler[:, 1], linewidth=1.0, color='g', label='pitch')
 insert_ax.plot(time, diff_euler[:, 2], linewidth=1.0, color='b', label='yaw')
 insert_ax.set_xlim(0, 40)
-insert_ax.set_ylim(-2.5, 0.5)
+insert_ax.set_ylim(-0.5, 0.5)
 insert_ax.tick_params(labelsize=8)
 insert_ax.grid(linestyle="--")
 

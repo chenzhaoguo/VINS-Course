@@ -1,6 +1,5 @@
 #pragma once
 
-// #include <ros/ros.h>
 #include <vector>
 #include <eigen3/Eigen/Dense>
 #include "utility/utility.h"
@@ -9,8 +8,6 @@
 #include <fstream>
 
 /// feature tracker
-// extern int ROW;
-// extern int COL;
 const int NUM_OF_CAM = 1;
 
 extern int FOCAL_LENGTH;
@@ -20,7 +17,6 @@ extern std::string FISHEYE_MASK;
 extern std::vector<std::string> CAM_NAMES;
 extern int MAX_CNT;
 extern int MIN_DIST;
-// extern int WINDOW_SIZE;
 extern int FREQ;
 extern double F_THRESHOLD;
 extern int SHOW_TRACK;
@@ -30,7 +26,6 @@ extern int FISHEYE;
 extern bool PUB_THIS_FRAME;
 
 /// estimator
-
 // const double FOCAL_LENGTH = 460.0;
 const int WINDOW_SIZE = 10;
 const int NUM_OF_F = 1000;
@@ -59,8 +54,6 @@ extern double TR;
 extern int ESTIMATE_TD;
 extern int ROLLING_SHUTTER;
 extern double ROW, COL;
-
-// void readParameters(ros::NodeHandle &n);
 
 void readParameters(std::string config_file);
 

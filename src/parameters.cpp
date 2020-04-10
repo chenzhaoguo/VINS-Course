@@ -26,11 +26,8 @@ int ESTIMATE_TD;
 int ROLLING_SHUTTER;
 string EX_CALIB_RESULT_PATH;
 string VINS_RESULT_PATH;
-// string IMU_TOPIC;
 double ROW, COL;
 double TD, TR;
-
-
 
 int FOCAL_LENGTH;
 string IMAGE_TOPIC;
@@ -39,7 +36,6 @@ string FISHEYE_MASK;
 vector<string> CAM_NAMES;
 int MAX_CNT;
 int MIN_DIST;
-// int WINDOW_SIZE;
 int FREQ;
 double F_THRESHOLD;
 int SHOW_TRACK;
@@ -48,16 +44,8 @@ int EQUALIZE;
 int FISHEYE;
 bool PUB_THIS_FRAME;
 
-
 void readParameters(string config_file)
 {
-    // string config_file;
-    // config_file = readParam<string>(n, "config_file");
-    // cv::FileStorage fsSettings(config_file, cv::FileStorage::READ);
-    // if (!fsSettings.isOpened())
-    // {
-    //     cerr << "ERROR: Wrong path to settings" << endl;
-    // }
     cv::FileStorage fsSettings(config_file, cv::FileStorage::READ);
     if (!fsSettings.isOpened())
     {
@@ -152,8 +140,6 @@ void readParameters(string config_file)
     {
         TR = 0;
     }
-
-    //string VINS_FOLDER_PATH = readParam<string>(n, "vins_folder");
 
     fsSettings["image_topic"] >> IMAGE_TOPIC;
     fsSettings["imu_topic"] >> IMU_TOPIC;

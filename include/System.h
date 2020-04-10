@@ -34,7 +34,7 @@ struct IMG_MSG {
   vector<float> velocity_x_of_point;
   vector<float> velocity_y_of_point;
 };
-typedef std::shared_ptr <IMG_MSG const> ImgConstPtr;
+typedef std::shared_ptr<IMG_MSG const> ImgConstPtr;
     
 class System {
  public:
